@@ -3680,3 +3680,51 @@ Y8625413<71NDO104296M3302910601C4074305223<IL)
 12:38:49.963 [http-nio-4800-exec-9] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
 12:38:49.964 [http-nio-4800-exec-9] DEBUG o.s.web.servlet.DispatcherServlet - Completed 406 NOT_ACCEPTABLE
 12:38:49.966 [http-nio-4800-exec-9] ERROR c.e.p.p.filter.AuthEntryPointJwt - Unauthorize error:Full authentication is required to access this resource
+12:49:21.231 [http-nio-4800-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - GET "/v1/auth/check", parameters={}
+12:49:21.232 [http-nio-4800-exec-1] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.passportVerify.passportVerifyBack.controller.UserController#check()
+12:49:21.237 [http-nio-4800-exec-1] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/octet-stream', given [*/*] and supported [*/*]
+12:49:21.237 [http-nio-4800-exec-1] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+12:49:21.238 [http-nio-4800-exec-1] DEBUG o.s.web.servlet.DispatcherServlet - Completed 406 NOT_ACCEPTABLE
+12:49:21.241 [http-nio-4800-exec-1] ERROR c.e.p.p.filter.AuthEntryPointJwt - Unauthorize error:Full authentication is required to access this resource
+12:49:21.252 [http-nio-4800-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - GET "/v1/auth/check", parameters={}
+12:49:21.252 [http-nio-4800-exec-2] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.passportVerify.passportVerifyBack.controller.UserController#check()
+12:49:21.253 [http-nio-4800-exec-2] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/octet-stream', given [*/*] and supported [*/*]
+12:49:21.253 [http-nio-4800-exec-2] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+12:49:21.254 [http-nio-4800-exec-2] DEBUG o.s.web.servlet.DispatcherServlet - Completed 406 NOT_ACCEPTABLE
+12:49:21.256 [http-nio-4800-exec-2] ERROR c.e.p.p.filter.AuthEntryPointJwt - Unauthorize error:Full authentication is required to access this resource
+12:49:57.937 [http-nio-4800-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - GET "/v1/auth/check", parameters={}
+12:49:57.942 [http-nio-4800-exec-3] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.passportVerify.passportVerifyBack.controller.UserController#check()
+12:49:57.945 [http-nio-4800-exec-3] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/octet-stream', given [*/*] and supported [*/*]
+12:49:57.946 [http-nio-4800-exec-3] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+12:49:57.946 [http-nio-4800-exec-3] DEBUG o.s.web.servlet.DispatcherServlet - Completed 406 NOT_ACCEPTABLE
+12:49:57.948 [http-nio-4800-exec-3] ERROR c.e.p.p.filter.AuthEntryPointJwt - Unauthorize error:Full authentication is required to access this resource
+12:49:57.952 [http-nio-4800-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - GET "/v1/auth/check", parameters={}
+12:49:57.952 [http-nio-4800-exec-4] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.passportVerify.passportVerifyBack.controller.UserController#check()
+12:49:57.953 [http-nio-4800-exec-4] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/octet-stream', given [*/*] and supported [*/*]
+12:49:57.953 [http-nio-4800-exec-4] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+12:49:57.953 [http-nio-4800-exec-4] DEBUG o.s.web.servlet.DispatcherServlet - Completed 406 NOT_ACCEPTABLE
+12:49:57.954 [http-nio-4800-exec-4] ERROR c.e.p.p.filter.AuthEntryPointJwt - Unauthorize error:Full authentication is required to access this resource
+12:50:04.040 [http-nio-4800-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - GET "/v1/auth/check", parameters={}
+12:50:04.040 [http-nio-4800-exec-5] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.passportVerify.passportVerifyBack.controller.UserController#check()
+12:50:04.041 [http-nio-4800-exec-5] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/octet-stream', given [*/*] and supported [*/*]
+12:50:04.042 [http-nio-4800-exec-5] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+12:50:04.042 [http-nio-4800-exec-5] DEBUG o.s.web.servlet.DispatcherServlet - Completed 406 NOT_ACCEPTABLE
+12:50:04.044 [http-nio-4800-exec-5] ERROR c.e.p.p.filter.AuthEntryPointJwt - Unauthorize error:Full authentication is required to access this resource
+12:50:04.052 [http-nio-4800-exec-6] DEBUG o.s.web.servlet.DispatcherServlet - GET "/v1/auth/check", parameters={}
+12:50:04.053 [http-nio-4800-exec-6] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.passportVerify.passportVerifyBack.controller.UserController#check()
+12:50:04.054 [http-nio-4800-exec-6] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/octet-stream', given [*/*] and supported [*/*]
+12:50:04.055 [http-nio-4800-exec-6] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+12:50:04.055 [http-nio-4800-exec-6] DEBUG o.s.web.servlet.DispatcherServlet - Completed 406 NOT_ACCEPTABLE
+12:50:04.060 [http-nio-4800-exec-6] ERROR c.e.p.p.filter.AuthEntryPointJwt - Unauthorize error:Full authentication is required to access this resource
+12:50:05.328 [http-nio-4800-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - GET "/v1/auth/check", parameters={}
+12:50:05.329 [http-nio-4800-exec-7] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.passportVerify.passportVerifyBack.controller.UserController#check()
+12:50:05.330 [http-nio-4800-exec-7] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/octet-stream', given [*/*] and supported [*/*]
+12:50:05.332 [http-nio-4800-exec-7] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+12:50:05.333 [http-nio-4800-exec-7] DEBUG o.s.web.servlet.DispatcherServlet - Completed 406 NOT_ACCEPTABLE
+12:50:05.335 [http-nio-4800-exec-7] ERROR c.e.p.p.filter.AuthEntryPointJwt - Unauthorize error:Full authentication is required to access this resource
+12:50:05.343 [http-nio-4800-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - GET "/v1/auth/check", parameters={}
+12:50:05.344 [http-nio-4800-exec-8] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to com.example.passportVerify.passportVerifyBack.controller.UserController#check()
+12:50:05.345 [http-nio-4800-exec-8] DEBUG o.s.w.s.m.m.a.HttpEntityMethodProcessor - Using 'application/octet-stream', given [*/*] and supported [*/*]
+12:50:05.345 [http-nio-4800-exec-8] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.web.HttpMediaTypeNotAcceptableException: No acceptable representation]
+12:50:05.346 [http-nio-4800-exec-8] DEBUG o.s.web.servlet.DispatcherServlet - Completed 406 NOT_ACCEPTABLE
+12:50:05.348 [http-nio-4800-exec-8] ERROR c.e.p.p.filter.AuthEntryPointJwt - Unauthorize error:Full authentication is required to access this resource
