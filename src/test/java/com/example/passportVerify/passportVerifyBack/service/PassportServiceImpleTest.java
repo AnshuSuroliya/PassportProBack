@@ -251,6 +251,7 @@ class PassportServiceImpleTest {
         when(passportDataRepository.findByNo(anyString())).thenReturn(null);
         VerificationResponse response = passportService.registerPassport(request);
         assertEquals("Verification failed due to state does not match", response.getMessage());
+        assertEquals(false,response.getSuccess());
     }
     @Test
     public void testRegisterPassport_DobNotMatching() throws TesseractException, IOException, ValidationException {
@@ -317,6 +318,7 @@ class PassportServiceImpleTest {
             when(passportDataRepository.findByNo(anyString())).thenReturn(null);
             VerificationResponse response = passportService.registerPassport(request);
             assertEquals("Verification Failed due to Passport Number does not match", response.getMessage());
+            assertEquals(false,response.getSuccess());
         }
         @Test
         public void testRegisterPassport_EmailRegistered() throws TesseractException,IOException,ValidationException{
@@ -445,12 +447,11 @@ class PassportServiceImpleTest {
             verify(tesseract, never()).doOCR((File) any());
             verify(passportDataRepository, never()).findByNo(anyString());
 
-            ValidationException exception = assertThrows(ValidationException.class,
-                    () -> passportService.registerPassport(request));
+            VerificationResponse verificationResponse2=passportService.registerPassport(request);
 
 
 
-            assertEquals("Provided input is syntax incorrect", exception.getMessage());
+            assertEquals("Provided input syntax is incorrect",verificationResponse2.getMessage());
 
         }
         @Test
@@ -474,7 +475,7 @@ class PassportServiceImpleTest {
         }
 
         @Test
-        void testGetPassport_PassportNotFound() {
+        void testGetPassport_PassportNotFound() throws PassportException {
 
             String email = "nonexistent@example.com";
             GetRequest getRequest = new GetRequest();
@@ -483,11 +484,9 @@ class PassportServiceImpleTest {
             when(passportDataRepository.findByEmail(email)).thenReturn(null);
 
 
-            PassportException exception = assertThrows(PassportException.class, () -> {
-                passportService.getPassport(getRequest);
-            });
+            PassportResponse passportResponse=passportService.getPassport(getRequest);
 
-            assertEquals("Error Fetching the details", exception.getMessage());
+            assertEquals(false, passportResponse.getSuccess());
             verify(passportDataRepository, times(1)).findByEmail(email);
         }
         @Test
@@ -542,10 +541,39 @@ class PassportServiceImpleTest {
         when(tesseract.doOCR(bufferedImage)).thenThrow(new TesseractException("Test TesseractException"));
 
 
-        assertThrows(TesseractException.class, () -> passportService.registerPassport(request));
-
+        VerificationResponse verificationResponse=passportService.registerPassport(request);
+        assertEquals("Error in Extracting text from image",verificationResponse.getMessage());
 
         verify(passportDataRepository, never()).save(any());
         verify(addressRepository, never()).save(any());
     }
+//    @Test
+//    void testRegisterPassport_IoException() throws TesseractException, IOException, ValidationException {
+//        PassportDataRequest request = new PassportDataRequest();
+//        request.setFirstName("Rahul");
+//        request.setLastName("Agrawal");
+//        request.setPhoneNumber("7890562300");
+//        request.setEmail("pankaj@gmail.com");
+//        request.setAddressLine1("dhsgd");
+//        request.setAddressLine2("sdgsdhd");
+//        request.setCity("jaipur");
+//        request.setState("rajasthan");
+//        request.setZipcode("302029");
+//        request.setDob(new java.sql.Date(2000,12,23));
+//        request.setPassportNumber("L74568900");
+//        MockMultipartFile imageFile = new MockMultipartFile("aadhaarImageFile", "aadhaar4.jpg", MediaType.IMAGE_JPEG_VALUE, "image data".getBytes());
+//        request.setPassportDoc(imageFile);
+//        String extractedText = "F27284823RahulSharma";
+//        BufferedImage bufferedImage=null;
+//        when(validationService.nameValidation(any())).thenReturn(true);
+//        when(validationService.emailValidation(any())).thenReturn(true);
+//        when(validationService.phoneNumberValidation(any())).thenReturn(true);
+//        when(validationService.passportNumberValidation(any())).thenReturn(true);
+//        when(validationService.zipcodeValidation((any()))).thenReturn(true);
+//        when(validationService.addressValidation(any())).thenReturn(true);
+//        when(passportDataRepository.findByNo(any())).thenReturn(null);
+//        when(tesseract.doOCR(bufferedImage)).thenThrow(new IOException("error in verification"));
+//        VerificationResponse verificationResponse=passportService.registerPassport(request);
+//        assertEquals("Error in Verification",verificationResponse.getMessage());
+//    }
 }

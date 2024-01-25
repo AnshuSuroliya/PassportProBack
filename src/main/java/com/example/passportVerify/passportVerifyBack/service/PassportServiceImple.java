@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 import javax.imageio.ImageIO;
 
@@ -133,13 +134,18 @@ public class PassportServiceImple implements PassportService{
 					}
 				} catch (TesseractException e) {
 					log.error("Error performing OCR", e);
-					VerificationResponse verificationResponse=new VerificationResponse("Error in Extracting text from image",false);
+					VerificationResponse verificationResponse = new VerificationResponse("Error in Extracting text from image", false);
 					return verificationResponse;
-				}catch(IOException e){
-					log.error("error in verification",e);
-					VerificationResponse verificationResponse=new VerificationResponse("Error in verification",false);
-					return verificationResponse;
+				}catch (NullPointerException e){
+					log.error("Provide all fields",e);
+					throw new NullPointerException("Provide all fields");
 				}
+
+//				}catch(IOException e){
+//					log.error("error in verification",e);
+//					VerificationResponse verificationResponse=new VerificationResponse("Error in verification",false);
+//					return verificationResponse;
+//				}
 			} else {
 				log.info("Provided input syntax is incorrect");
 				VerificationResponse verificationResponse=new VerificationResponse("Provided input syntax is incorrect",false);

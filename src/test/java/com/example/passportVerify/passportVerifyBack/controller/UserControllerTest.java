@@ -6,6 +6,7 @@ import com.example.passportVerify.passportVerifyBack.exception.ValidationExcepti
 import com.example.passportVerify.passportVerifyBack.repository.UserRepository;
 import com.example.passportVerify.passportVerifyBack.request.GetRequest;
 import com.example.passportVerify.passportVerifyBack.request.Login;
+import com.example.passportVerify.passportVerifyBack.response.CheckResponse;
 import com.example.passportVerify.passportVerifyBack.response.LoginResponse;
 import com.example.passportVerify.passportVerifyBack.response.SignupResponse;
 import com.example.passportVerify.passportVerifyBack.service.UserRegisterServiceImple;
@@ -131,6 +132,16 @@ class UserControllerTest {
 
         assertEquals("User not found", exception.getMessage());
         verify(userRegisterService, times(1)).getUser(getRequest);
+    }
+    @Test
+    void testCheck_Success(){
+
+        ResponseEntity<CheckResponse> responseEntity = userController.check();
+        CheckResponse checkResponse=new CheckResponse();
+        checkResponse.setSuccess(true);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
     }
 
 }

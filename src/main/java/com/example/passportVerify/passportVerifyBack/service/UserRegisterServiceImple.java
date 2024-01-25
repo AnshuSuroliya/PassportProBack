@@ -13,6 +13,7 @@ import com.example.passportVerify.passportVerifyBack.response.SignupResponse;
 import jakarta.security.auth.message.AuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.auditing.CurrentDateTimeProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +44,10 @@ public class UserRegisterServiceImple implements UserServiceRegister{
     @Autowired
     LoginAttemptRepository loginAttemptRepository;
 
-    int count=0;
-    private Long continiousAttempDuration = 30*1000L;
-    private Long LockDuration = 5*60*1000L;
+
+    private Long continiousAttempDuration=60*60*1000L;
+
+    private Long lockDuration=5*60*1000L;
 @Override
     public SignupResponse signUp(User user) throws UserException, ValidationException {
         if(validationService.nameValidation(user.getFirstName()) && validationService.nameValidation(user.getLastName()) && validationService.emailValidation(user.getEmail()) && validationService.phoneNumberValidation(user.getPhoneNumber())) {
@@ -69,7 +71,7 @@ public class UserRegisterServiceImple implements UserServiceRegister{
                     return signupResponse1;
                 }
             }catch (Exception e){
-                log.error("Error in creating account");
+                log.error("Error in creating account",e);
                 SignupResponse signupResponse=new SignupResponse("Some error occured in creating account",false);
                 return new ResponseEntity<SignupResponse>(signupResponse, HttpStatus.OK).getBody();
             }
@@ -97,7 +99,7 @@ public class UserRegisterServiceImple implements UserServiceRegister{
 //            }
 
                     try {
-                        if(user.getLocked() && currentDate.getTime()-user.getFailedTime().getTime()<LockDuration){
+                        if(user.getLocked() && currentDate.getTime()-user.getFailedTime().getTime()<lockDuration){
 
                         log.info("Your account is Locked.Try after 5 min.");
                         LoginResponse loginResponse=new LoginResponse(false,null,"Your account is Locked!Try after 5 min.",null);
@@ -126,9 +128,9 @@ public class UserRegisterServiceImple implements UserServiceRegister{
                             }
 
                     }catch (Exception e){
-                        log.error("Wrong Password");
+                        log.error("Wrong Password",e);
                         LoginAttempt loginAttempt=loginAttemptRepository.findByUserId(user);
-                        long lastAttemptTime =31*60*1000;
+                        long lastAttemptTime =lockDuration+1;
                         if(loginAttempt!=null){
                             Date lastAttempt = loginAttempt.getTime();
                             lastAttemptTime = currentDate.getTime() - lastAttempt.getTime();

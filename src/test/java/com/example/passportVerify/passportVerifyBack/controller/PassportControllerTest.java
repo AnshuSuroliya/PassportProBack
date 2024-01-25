@@ -65,7 +65,7 @@ class PassportControllerTest {
 
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(passportData, responseEntity.getBody());
+        assertEquals(passportResponse, responseEntity.getBody());
         verify(passportServiceImple, times(1)).getPassport(getRequest);
     }
 

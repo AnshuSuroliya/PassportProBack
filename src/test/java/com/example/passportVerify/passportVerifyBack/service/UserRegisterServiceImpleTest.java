@@ -1,8 +1,10 @@
 package com.example.passportVerify.passportVerifyBack.service;
 
+import com.example.passportVerify.passportVerifyBack.entity.LoginAttempt;
 import com.example.passportVerify.passportVerifyBack.entity.User;
 import com.example.passportVerify.passportVerifyBack.exception.UserException;
 import com.example.passportVerify.passportVerifyBack.exception.ValidationException;
+import com.example.passportVerify.passportVerifyBack.repository.LoginAttemptRepository;
 import com.example.passportVerify.passportVerifyBack.repository.UserRepository;
 import com.example.passportVerify.passportVerifyBack.request.GetRequest;
 import com.example.passportVerify.passportVerifyBack.request.Login;
@@ -19,6 +21,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -27,7 +31,8 @@ class UserRegisterServiceImpleTest {
 
         @Mock
         private UserRepository userRepository;
-
+        @Mock
+        private LoginAttemptRepository loginAttemptRepository;
         @Mock
         private AuthenticationManager authenticationManager;
 
@@ -85,10 +90,11 @@ class UserRegisterServiceImpleTest {
             SignupResponse response = userRegisterServiceImple.signUp(user);
 
             assertEquals("User Already Present", response.getMessage());
+            assertEquals(false,response.getSuccess());
 
         }
         @Test
-        public void Signup_Exception() throws ValidationException {
+        public void Signup_Exception() throws ValidationException, UserException {
             User user=new User();
             user.setFirstName("Pankaj");
             user.setLastName("Sharma");
@@ -102,10 +108,10 @@ class UserRegisterServiceImpleTest {
             // Set the userRepository in your service using reflection or constructor injection
 
 
-            Exception exception = assertThrows(UserException.class, () -> userRegisterServiceImple.signUp(user));
 
-
-            assertEquals("Error in creating account", exception.getMessage());
+            SignupResponse signupResponse=userRegisterServiceImple.signUp(user);
+            assertEquals("Some error occured in creating account",signupResponse.getMessage());
+            assertEquals(false,signupResponse.getSuccess());
 
         }
 
@@ -126,7 +132,8 @@ class UserRegisterServiceImpleTest {
             when(validationService.phoneNumberValidation(any())).thenReturn(false);
             when(validationService.emailValidation(any())).thenReturn(false);
 
-            assertThrows(ValidationException.class, () -> userRegisterServiceImple.signUp(user));
+            SignupResponse signupResponse2=userRegisterServiceImple.signUp(user);
+            assertEquals("Provided input syntax is incorrect",signupResponse2.getMessage());
 
         }
 
@@ -135,11 +142,12 @@ class UserRegisterServiceImpleTest {
             Login login = new Login("test@example.com", "password");
             User user = new User();
             user.setEmail("test@example.com");
+
             user.setPassword(new BCryptPasswordEncoder().encode("password"));
 
             when(validationService.emailValidation(any())).thenReturn(true);
             when(userRepository.findByEmail(login.getEmail())).thenReturn(user);
-
+            when(loginAttemptRepository.findByUserId(any())).thenReturn(null);
             Authentication authentication = mock(Authentication.class);
             when(authentication.isAuthenticated()).thenReturn(true);
             when(authenticationManager.authenticate(any())).thenReturn(authentication);
@@ -199,7 +207,15 @@ class UserRegisterServiceImpleTest {
         public void testSignIn_WrongPassword() throws UserException, ValidationException {
             Login login = new Login();
             login.setEmail("pankaj@gmail.com");
-            login.setPassword("pan23");// create a login object with necessary data
+            login.setPassword("pan23");
+            User user=new User();
+            user.setFailedTime(user.getFailedTime());
+            LoginAttempt loginAttempt=new LoginAttempt();
+            loginAttempt.setId(loginAttempt.getId());
+            loginAttempt.setFailedAttempt(loginAttempt.getFailedAttempt());
+            loginAttempt.setTime(loginAttempt.getTime());
+            loginAttempt.setUser(loginAttempt.getUser());
+            // create a login object with necessary data
             when(validationService.emailValidation(any())).thenReturn(true);
             when(userRepository.findByEmail(any())).thenReturn(new User());
             when(authenticationManager.authenticate(any())).thenReturn(mock(Authentication.class));
@@ -225,7 +241,8 @@ class UserRegisterServiceImpleTest {
             LoginResponse loginResponse1=new LoginResponse(false,null,null,null);
             when(validationService.emailValidation(any())).thenReturn(false);
 
-            assertThrows(ValidationException.class, () -> userRegisterServiceImple.signIn(login));
+            LoginResponse loginResponse2=userRegisterServiceImple.signIn(login);
+            assertEquals("Provided input syntax is incorrect",loginResponse2.getMessage());
 
         }
         @Test
@@ -251,7 +268,7 @@ class UserRegisterServiceImpleTest {
 
 
     @Test
-    public void testSignInWithUserException() throws ValidationException {
+    public void testSignInWithUserException() throws ValidationException, UserException {
 
 
         Login login = new Login("nonexistent@example.com", "some_password");
@@ -264,10 +281,10 @@ class UserRegisterServiceImpleTest {
         // Set the authenticationManager in your service using reflection or constructor injection
 
 
-        Exception exception = assertThrows(UserException.class, () -> userRegisterServiceImple.signIn(login));
+       LoginResponse loginResponse=userRegisterServiceImple.signIn(login);
 
 
-        assertEquals("error in login", exception.getMessage());
+        assertEquals("Wrong Password,Only 2 attempts left",loginResponse.getMessage());
     }
     @Test
     public void testGetUserNotFound() {
@@ -308,5 +325,88 @@ class UserRegisterServiceImpleTest {
 
         verify(userRepository, times(1)).findByEmail(getRequest.getEmail());
     }
+//    @Test
+//    void testSignIn_UserLocked() throws UserException, ValidationException {
+//        // Arrange
+//        Login login = new Login();
+//        login.setEmail("test@example.com");
+//        login.setPassword("password");
+//
+//        User user = new User();
+//        user.setEmail("test@example.com");
+//        user.setPassword("encodedPassword");
+//        user.setLocked(true);
+//        user.setFailedTime(new Date(System.currentTimeMillis() - 300_000));
+//        when(validationService.emailValidation(any())).thenReturn(true);
+//        when(userRepository.save(user)).thenReturn(user);
+//        when(userRepository.findByEmail(any())).thenReturn(user);
+//
+//        // Act
+//        LoginResponse response = userRegisterServiceImple.signIn(login);
+//
+//        // Assert
+//        assertNotNull(response);
+//        assertFalse(response.getSuccess());
+//        assertEquals("Your account is Locked!Try after 5 min.", response.getMessage());
+//    }
 
+    @Test
+    void testSignIn_InvalidAttempts_OneAttemptLeft() throws UserException, ValidationException {
+        // Arrange
+        Login login = new Login();
+        login.setEmail("test@example.com");
+        login.setPassword("wrongPassword");
+
+        User user = new User();
+        user.setEmail("test@example.com");
+        user.setPassword("encodedPassword");
+        user.setLocked(false);
+        user.setFailedTime(new Date(System.currentTimeMillis() - 60_000)); // Within continuous attempt duration
+
+        LoginAttempt loginAttempt = new LoginAttempt();
+        loginAttempt.setFailedAttempt(1);
+        loginAttempt.setTime(new Date(System.currentTimeMillis() - 30_000)); // Within continuous attempt duration
+
+        when(validationService.emailValidation(any())).thenReturn(true);
+        when(userRepository.findByEmail(any())).thenReturn(user);
+        when(loginAttemptRepository.findByUserId(any())).thenReturn(loginAttempt);
+
+        // Act
+        LoginResponse response = userRegisterServiceImple.signIn(login);
+
+        // Assert
+        assertNotNull(response);
+        assertFalse(response.getSuccess());
+        assertEquals("Wrong Password,Only 1 attempt left", response.getMessage());
+    }
+
+    @Test
+    void testSignIn_InvalidAttempts_AccountLocked() throws UserException, ValidationException {
+        // Arrange
+        Login login = new Login();
+        login.setEmail("test@example.com");
+        login.setPassword("wrongPassword");
+
+        User user = new User();
+        user.setEmail("test@example.com");
+        user.setPassword("encodedPassword");
+        user.setLocked(false);
+        user.setFailedTime(new Date(System.currentTimeMillis() - 60_000)); // Within continuous attempt duration
+
+        LoginAttempt loginAttempt = new LoginAttempt();
+        loginAttempt.setFailedAttempt(2);
+        loginAttempt.setTime(new Date(System.currentTimeMillis() - 30_000)); // Within continuous attempt duration
+
+        when(validationService.emailValidation(any())).thenReturn(true);
+        when(userRepository.findByEmail(any())).thenReturn(user);
+        when(loginAttemptRepository.findByUserId(any())).thenReturn(loginAttempt);
+
+        // Act
+        LoginResponse response = userRegisterServiceImple.signIn(login);
+
+        // Assert
+        assertNotNull(response);
+        assertFalse(response.getSuccess());
+        assertEquals("Too many wrong attempts your account is locked for 5 min.", response.getMessage());
+    }
 }
